@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two Years, Twenty-Six Chapters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+
+<!--
+  HOW TO EDIT THIS PAGE (for the person setting this up):
+
+  1. TEXT: Scroll down to the big "entries" list inside the <script> tag near the
+     bottom of this file. Each entry has a "text" field — edit the words between
+     the quotes to change any poem or letter. Use \n\n for a new paragraph break.
+
+  2. PHOTOS: Make a folder called "photos" in the same place as this HTML file.
+     Each entry below has a "photo" field like "photos/2024-08.jpeg" — just save
+     your picture with that exact file name (or change the field to match your
+     file name) and it will appear automatically. If no photo is found, a cute
+     placeholder shows instead, so nothing breaks if you skip a month.
+
+  3. Everything else (colors, layout, animation) can be left alone — it will
+     just work once you open the file in a browser.
+-->
+
+<style>
+  :root{
+    --cream:#FFF8F1;
+    --ink:#4A3B52;
+    --ink-soft:#7A6B85;
+    --pink:#F0A8C4;
+    --pink-deep:#E387AC;
+    --lavender:#B7A6E6;
+    --mint:#9FD6D3;
+    --peach:#F4BE8E;
+    --gold:#E7B04E;
+    --white:#FFFFFF;
+    --shadow: 0 12px 30px rgba(74,59,82,0.12);
+  }
+
+  *{ box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(240,168,196,0.18), transparent 40%),
+      radial-gradient(circle at 85% 85%, rgba(183,166,230,0.18), transparent 40%),
+      var(--cream);
+    color:var(--ink);
+    font-family:'Fredoka', sans-serif;
+    overflow-x:hidden;
+  }
+
+  button{ font-family:inherit; cursor:pointer; border:none; }
+
+  /* ---------- decorative bunny mark ---------- */
+  .bunny-mark{ display:inline-block; }
+
+  /* ---------- SCREEN 1 : the question ---------- */
+  #screen-question{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:2rem;
+    position:relative;
+  }
+
+  .q-eyebrow{
+    font-size:0.95rem;
+    color:var(--ink-soft);
+    letter-spacing:0.02em;
+    margin-bottom:0.6rem;
+  }
+
+  .q-headline{
+    font-size:clamp(1.9rem, 5vw, 3.4rem);
+    font-weight:600;
+    line-height:1.25;
+    max-width:16ch;
+    margin:0 0 2.4rem 0;
+  }
+
+  .q-buttons{
+    display:flex;
+    gap:1.4rem;
+    align-items:center;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+
+  #yesBtn{
+    background:var(--pink-deep);
+    color:var(--white);
+    font-size:1.15rem;
+    font-weight:600;
+    padding:0.95rem 2.6rem;
+    border-radius:999px;
+    box-shadow:var(--shadow);
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  #yesBtn:hover{ transform:translateY(-2px) scale(1.03); box-shadow:0 16px 34px rgba(227,135,172,0.35); }
+  #yesBtn:active{ transform:translateY(0) scale(0.98); }
+
+  #noBtn{
+    background:transparent;
+    color:var(--ink-soft);
+    font-size:1.05rem;
+    font-weight:500;
+    padding:0.9rem 2.2rem;
+    border-radius:999px;
+    border:2px solid rgba(122,107,133,0.35);
+    position:fixed;
+    transition:left 0.28s cubic-bezier(.2,.9,.3,1.3), top 0.28s cubic-bezier(.2,.9,.3,1.3);
+    z-index:5;
+  }
+
+  .q-hint{
+    margin-top:2.4rem;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    opacity:0.7;
+  }
+
+  /* ---------- SCREEN 2 : calendar ---------- */
+  #screen-calendar{
+    display:none;
+    max-width:920px;
+    margin:0 auto;
+    padding:3.5rem 1.5rem 6rem;
+  }
+
+  .cal-header{
+    text-align:center;
+    margin-bottom:3rem;
+  }
+
+  .cal-header h1{
+    font-size:clamp(1.8rem, 4.4vw, 2.7rem);
+    font-weight:600;
+    margin:0 0 0.7rem 0;
+    line-height:1.25;
+  }
+
+  .cal-header p{
+    color:var(--ink-soft);
+    font-size:1.02rem;
+    max-width:46ch;
+    margin:0 auto;
+    line-height:1.6;
+  }
+
+  .year-block{ margin-bottom:2.6rem; }
+
+  .year-label{
+    display:flex;
+    align-items:center;
+    gap:0.9rem;
+    font-size:1.05rem;
+    font-weight:600;
+    color:var(--ink-soft);
+    margin-bottom:1rem;
+  }
+  .year-label::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:rgba(122,107,133,0.2);
+  }
+
+  .month-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(96px, 1fr));
+    gap:0.85rem;
+  }
+
+  .month-btn{
+    background:var(--white);
+    border-radius:18px;
+    padding:1rem 0.6rem 0.85rem;
+    text-align:center;
+    box-shadow:0 4px 14px rgba(74,59,82,0.08);
+    border:2px solid transparent;
+    transition:transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    position:relative;
+  }
+  .month-btn:hover{ transform:translateY(-3px); box-shadow:0 10px 22px rgba(74,59,82,0.14); }
+  .month-btn:focus-visible{ outline:3px solid var(--pink-deep); outline-offset:2px; }
+
+  .month-btn .m-name{ display:block; font-weight:600; font-size:1rem; }
+  .month-btn .m-dot{
+    display:block;
+    width:9px; height:9px;
+    border-radius:50%;
+    margin:0.5rem auto 0;
+  }
+
+  .month-btn.season-winter .m-dot{ background:var(--lavender); }
+  .month-btn.season-spring .m-dot{ background:var(--pink); }
+  .month-btn.season-summer .m-dot{ background:var(--mint); }
+  .month-btn.season-autumn .m-dot{ background:var(--peach); }
+
+  .month-btn.is-special{ border-color:var(--gold); }
+  .month-btn.is-special .m-name::after{
+    content:" ✦";
+    color:var(--gold);
+  }
+
+  /* ---------- MODAL ---------- */
+  #overlay{
+    display:none;
+    position:fixed; inset:0;
+    background:rgba(74,59,82,0.45);
+    backdrop-filter:blur(2px);
+    z-index:50;
+    align-items:center;
+    justify-content:center;
+    padding:1.5rem;
+  }
+
+  .modal{
+    background:var(--cream);
+    border-radius:22px;
+    max-width:560px;
+    width:100%;
+    max-height:88vh;
+    overflow-y:auto;
+    padding:2.1rem 1.9rem 2.3rem;
+    box-shadow:0 24px 60px rgba(74,59,82,0.3);
+    position:relative;
+  }
+
+  .modal-close{
+    position:absolute;
+    top:1rem; right:1rem;
+    background:rgba(122,107,133,0.1);
+    width:34px; height:34px;
+    border-radius:50%;
+    font-size:1.1rem;
+    color:var(--ink-soft);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .modal-close:hover{ background:rgba(122,107,133,0.2); }
+
+  .modal-date{
+    font-size:0.85rem;
+    font-weight:600;
+    color:var(--pink-deep);
+    letter-spacing:0.02em;
+    margin-bottom:0.3rem;
+  }
+  .modal-date.special{ color:var(--gold); }
+
+  .modal-title{
+    font-size:1.5rem;
+    font-weight:600;
+    margin:0 0 1.2rem 0;
+  }
+
+  .photo-frame{
+    width:100%;
+    aspect-ratio:4/3;
+    border-radius:16px;
+    overflow:hidden;
+    margin-bottom:1.4rem;
+    background:linear-gradient(135deg, rgba(240,168,196,0.25), rgba(183,166,230,0.25));
+    display:flex; align-items:center; justify-content:center;
+  }
+  .photo-frame img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .photo-placeholder{
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:0.85rem;
+    padding:1rem;
+    line-height:1.5;
+  }
+  .photo-placeholder svg{ width:34px; height:34px; margin-bottom:0.4rem; }
+
+  .modal-text{
+    font-family:'Caveat', cursive;
+    font-size:1.5rem;
+    line-height:1.55;
+    white-space:pre-wrap;
+    color:var(--ink);
+  }
+
+  /* ---------- confetti (birthday only) ---------- */
+  .confetti{
+    position:fixed;
+    top:-10px;
+    width:8px; height:14px;
+    border-radius:2px;
+    z-index:60;
+    pointer-events:none;
+    animation:fall linear forwards;
+  }
+  @keyframes fall{
+    to{ transform:translateY(105vh) rotate(320deg); opacity:0.9; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
+  }
+
+  @media (max-width:480px){
+    #noBtn{ font-size:0.95rem; padding:0.75rem 1.6rem; }
+    .modal{ padding:1.6rem 1.3rem 1.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= SCREEN 1 ================= -->
+<section id="screen-question">
+  <div class="q-eyebrow">a little something before your 18th</div>
+  <h1 class="q-headline">Do you want to relive your past two years?</h1>
+  <div class="q-buttons">
+    <button id="yesBtn">yes, show me</button>
+    <button id="noBtn">no thanks</button>
+  </div>
+  <p class="q-hint">(you only really have one option here)</p>
+</section>
+
+<!-- ================= SCREEN 2 ================= -->
+<section id="screen-calendar">
+  <div class="cal-header">
+    <h1>Two Years, Twenty-Six Chapters</h1>
+    <p>Every month since August 2024, right up to your 18th birthday. Tap a month to open it.</p>
+  </div>
+  <div id="yearContainer"></div>
+</section>
+
+<!-- ================= MODAL ================= -->
+<div id="overlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <button class="modal-close" id="closeModal" aria-label="Close">✕</button>
+    <div class="modal-date" id="modalDate"></div>
+    <h2 class="modal-title" id="modalTitle"></h2>
+    <div class="photo-frame" id="photoFrame"></div>
+    <div class="modal-text" id="modalText"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   ENTRIES — edit the "text" below to change any letter/poem.
+   Change "photo" to match your own image file names.
+   ============================================================ */
+const entries = [
+  {id:"2024-08", year:"2024", month:"August", season:"summer",
+   photo:"photos/2024-08.jpeg",
+   text:"I don't remember the exact moment we became friends — it just happened, the way spring happens, quietly and then all at once. One day you were someone I knew, and the next you were someone I couldn't imagine my days without.\n\nYou have this way of tilting your head when you laugh, like a curious little rabbit catching a new sound for the first time. I didn't know then that this month would be the start of two of the best years of my life.\n\nThank you for showing up exactly as you are."},
+
+  {id:"2024-09", year:"2024", month:"September", season:"autumn",
+   photo:"photos/2024-09.jpeg",
+   text:"September comes in soft and gold,\nand so did you, before I knew—\na laugh that carried down the hall,\na kindness nothing could undo.\n\nYou never made me feel too much\nor not enough, just simply seen.\nTwo years ago this month began\nthe best thing that has ever been."},
+
+  {id:"2024-10", year:"2024", month:"October", season:"autumn",
+   photo:"photos/2024-10.jpeg",
+   text:"There's a particular kind of cold that only cocoa and good company can fix, and this month I learned you're the best kind of company there is.\n\nYou have this habit of noticing when someone's having a hard day before they even say it — you did it for me, more than once. It's a small thing, maybe, but it's also everything. You're proof that kindness doesn't have to be loud to be enormous."},
+
+  {id:"2024-11", year:"2024", month:"November", season:"autumn",
+   photo:"photos/2024-11.jpeg",
+   text:"If gratitude had a shape,\nI think it would look like you—\nsmall and warm and endlessly kind,\nsoft-eyed, quick to laugh, quicker to care.\n\nThis month I counted all the things\nI'm thankful for, and near the top,\nright under family, right under home,\nyour name was written, underlined twice."},
+
+  {id:"2024-12", year:"2024", month:"December", season:"winter",
+   photo:"photos/2024-12.jpeg",
+   text:"The year is ending and somehow you've become one of its best parts. I keep thinking about how easy you make things — how a bad day gets smaller the second you show up, practically buzzing with whatever ridiculous story you're about to tell me.\n\nHere's to closing out this year exactly the way it started: laughing with you."},
+
+  {id:"2025-01", year:"2025", month:"January", season:"winter",
+   photo:"photos/2025-01.jpeg",
+   text:"New year, same you—\nwhich is the whole point, really.\nSome things don't need reinventing.\n\nYour kindness was already the best version of itself\nin December, in August, in every month before,\nand I'm glad you brought it with you into January,\nuninterrupted, unimproved, perfect as it was."},
+
+  {id:"2025-02", year:"2025", month:"February", season:"winter",
+   photo:"photos/2025-02.jpeg",
+   text:"Cold month, warm friend. I don't think I've ever met anyone who makes people feel as instantly comfortable as you do — like they've known you for years within minutes of meeting you.\n\nIt's a strange kind of magic. I got the lucky version of it: years and years of you, and I still haven't gotten used to how good it feels."},
+
+  {id:"2025-03", year:"2025", month:"March", season:"spring",
+   photo:"photos/2025-03.jpeg",
+   text:"March shook off the winter slow,\nand so did we, into longer days—\nmore time outside, more time to talk,\n\nmore time to watch you chase the light\nthe way you always do, like something\nin you simply cannot sit still\nwhen there's joy nearby to catch."},
+
+  {id:"2025-04", year:"2025", month:"April", season:"spring",
+   photo:"photos/2025-04.jpeg",
+   text:"You have this thing where you get excited about other people's happiness like it's your own — I've watched you celebrate my smallest wins like they were yours to keep.\n\nThat's rare. Most people cheer for you when it's convenient. You cheer for everyone, always, without being asked."},
+
+  {id:"2025-05", year:"2025", month:"May", season:"spring",
+   photo:"photos/2025-05.jpeg",
+   text:"May was warm, and so were you,\nshort in height, enormous in heart,\nthe kind of person rooms get brighter for\nthe second you walk into them.\n\nI used to think that was just a saying.\nThen I met you, and it became a fact."},
+
+  {id:"2025-06", year:"2025", month:"June", season:"summer",
+   photo:"photos/2025-06.jpeg",
+   text:"Summer brought long days and longer conversations, the kind where we'd start talking about nothing and end up talking about everything.\n\nYou listen like it matters — really listen, not just wait for your turn. I don't take that for granted. Not for one single month of these two years."},
+
+  {id:"2025-07", year:"2025", month:"July", season:"summer",
+   photo:"photos/2025-07.jpeg",
+   text:"July, and you laughed so hard\nyou had to sit down right there,\nknees to your chest, eyes wet with joy—\n\nand I remember thinking: this,\nthis exact moment, this exact sound,\nis the thing I'll miss most\nwhen we're both old and gray."},
+
+  {id:"2025-08", year:"2025", month:"August", season:"summer",
+   photo:"photos/2025-08.jpeg",
+   text:"One year since we started this. I keep coming back to how ordinary it felt at the time and how extraordinary it looks now, looking back.\n\nYou didn't have to be this kind, this present, this endlessly good to know — but you were, every single month, without exception. Here's to year two."},
+
+  {id:"2025-09", year:"2025", month:"September", season:"autumn", special:true,
+   photo:"photos/2025-09.jpeg",
+   text:"Happy birthday, little rabbit heart—\nseventeen looks good on you,\nthough truthfully, every year does.\n\nI hope this one holds everything\nyou deserve, which is: everything good,\nall of it, all at once, no waiting."},
+
+  {id:"2025-10", year:"2025", month:"October", season:"autumn",
+   photo:"photos/2025-10.jpeg",
+   text:"Fall again, and with it, the memory of last fall, and the one before whatever came before us.\n\nI like that time moves in circles like this — it means I get every season with you twice now, and I already know both versions are good ones."},
+
+  {id:"2025-11", year:"2025", month:"November", season:"autumn",
+   photo:"photos/2025-11.jpeg",
+   text:"Gratitude again, same time, same month,\nbut never the same list twice.\n\nThis year it's fuller — more inside jokes,\nmore nights that ran too late,\nmore proof that you're the kind of friend\npeople write about and hope\nsomeone believes they're not exaggerating."},
+
+  {id:"2025-12", year:"2025", month:"December", season:"winter",
+   photo:"photos/2025-12.jpeg",
+   text:"Another year closing, and I'm struck again by how much lighter everything feels with you in it.\n\nYou make hard months softer just by being around. That's not nothing. That's actually the whole thing."},
+
+  {id:"2026-01", year:"2026", month:"January", season:"winter",
+   photo:"photos/2026-01.jpeg",
+   text:"January, and the new year again,\nexcept this time there's history behind it—\na year and a half of you now,\n\nproof that the good ones don't run out,\nthey just keep showing up,\nsofter around the edges,\nsomehow even more themselves."},
+
+  {id:"2026-02", year:"2026", month:"February", season:"winter",
+   photo:"photos/2026-02.jpeg",
+   text:"I think what I love most is that you're never performing kindness — you just are kind, the way some people are just tall or just funny.\n\nIt's not effort for you. It's just who you are, and the rest of us are lucky to be around it."},
+
+  {id:"2026-03", year:"2026", month:"March", season:"spring",
+   photo:"photos/2026-03.jpeg",
+   text:"Spring again, and you again,\nchasing sunlight like it's new\neven though you've chased it every year—\n\nthat's the thing about you, I think:\nnothing gets old in your hands,\nnot spring, not friendship, not joy."},
+
+  {id:"2026-04", year:"2026", month:"April", season:"spring",
+   photo:"photos/2026-04.jpeg",
+   text:"You have never once made me feel small for needing help, or silly for being upset about something minor. You just show up, every time, with the same soft patience.\n\nI hope somebody's kept a record of every time you've done that, because it's a long list by now."},
+
+  {id:"2026-05", year:"2026", month:"May", season:"spring",
+   photo:"photos/2026-05.jpeg",
+   text:"Almost two years now, can you believe it—\ntime moved fast in the good kind of way,\nthe way it does when every month\nhas your laugh somewhere inside it,\n\nyour kindness tucked into the edges,\nmaking the whole thing warmer than it should've been."},
+
+  {id:"2026-06", year:"2026", month:"June", season:"summer",
+   photo:"photos/2026-06.jpeg",
+   text:"Summer's back, and so is the version of you that gets a little more fearless in the sun — the one who suggests the spontaneous plans, who says yes before thinking twice.\n\nI love that version. I love all your versions, honestly, but that one's a personal favorite."},
+
+  {id:"2026-07", year:"2026", month:"July", season:"summer",
+   photo:"photos/2026-07.jpeg",
+   text:"Two years, almost exactly,\nsince a friendship started quietly\nand grew into the loudest, best thing\nin both our lives.\n\nI don't think either of us\nexpected it to matter this much.\nI'm glad it did anyway."},
+
+  {id:"2026-08", year:"2026", month:"August", season:"summer",
+   photo:"photos/2026-08.jpeg",
+   text:"This is the last full month before you turn eighteen, and I've spent most of it thinking back through all twenty-five months before this one — all of them better because you were in them.\n\nI hope you know how much you're loved, not just by me, but by everyone lucky enough to know you."},
+
+  {id:"2026-09", year:"2026", month:"September", season:"autumn", special:true, birthday:true,
+   photo:"photos/2026-09.jpeg",
+   title:"Happy 18th Birthday",
+   text:"Two years ago I clicked a button not knowing what I was starting. Now I'm here, at the end of this little calendar, and it still doesn't feel like enough to hold everything you've meant to these past two years.\n\nYou are, without exaggeration, the kindest person I have ever known — the kind of kind that isn't loud about it, that just quietly makes everyone around you feel safer, funnier, more themselves. You have a laugh that fixes bad days. You have a heart that's too big for someone your height, and I mean that as the highest compliment I know how to give.\n\nEighteen looks incredible on you. I hope this year gives you everything you've given everyone else without ever asking for anything back. I hope it's soft and funny and a little wild, and I hope I'm there for every bit of it, the way you've been there for me.\n\nHappy birthday, bunny. Here's to the next two years, and the two after that, and every single one after that.\n\nI love you. Always have. Always will."}
+];
+
+/* ---------- build screen 2 ---------- */
+const yearContainer = document.getElementById('yearContainer');
+const years = [...new Set(entries.map(e => e.year))];
+
+years.forEach(year => {
+  const block = document.createElement('div');
+  block.className = 'year-block';
+
+  const label = document.createElement('div');
+  label.className = 'year-label';
+  label.textContent = year;
+  block.appendChild(label);
+
+  const grid = document.createElement('div');
+  grid.className = 'month-grid';
+
+  entries.filter(e => e.year === year).forEach(entry => {
+    const btn = document.createElement('button');
+    btn.className = `month-btn season-${entry.season}` + (entry.special ? ' is-special' : '');
+    btn.innerHTML = `<span class="m-name">${entry.month}</span><span class="m-dot"></span>`;
+    btn.addEventListener('click', () => openEntry(entry));
+    grid.appendChild(btn);
+  });
+
+  block.appendChild(grid);
+  yearContainer.appendChild(block);
+});
+
+/* ---------- modal logic ---------- */
+const overlay = document.getElementById('overlay');
+const modalDate = document.getElementById('modalDate');
+const modalTitle = document.getElementById('modalTitle');
+const modalText = document.getElementById('modalText');
+const photoFrame = document.getElementById('photoFrame');
+
+function openEntry(entry){
+  modalDate.textContent = `${entry.month} ${entry.year}`;
+  modalDate.className = 'modal-date' + (entry.special ? ' special' : '');
+  modalTitle.textContent = entry.title || `${entry.month} ${entry.year}`;
+  modalText.textContent = entry.text;
+
+  photoFrame.innerHTML = '';
+  const img = document.createElement('img');
+  img.src = entry.photo;
+  img.alt = `Photo from ${entry.month} ${entry.year}`;
+  img.onerror = function(){
+    photoFrame.innerHTML = `<div class="photo-placeholder">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M4 16l4.5-5.5a2 2 0 0 1 3 0L16 16"/>
+        <circle cx="9" cy="9" r="1.6"/>
+        <rect x="3" y="4" width="18" height="16" rx="3"/>
+      </svg>
+      add a photo here — save it as<br><strong>${entry.photo}</strong>
+    </div>`;
+  };
+  photoFrame.appendChild(img);
+
+  overlay.style.display = 'flex';
+  if(entry.birthday){ launchConfetti(); }
+}
+
+document.getElementById('closeModal').addEventListener('click', () => overlay.style.display = 'none');
+overlay.addEventListener('click', e => { if(e.target === overlay) overlay.style.display = 'none'; });
+document.addEventListener('keydown', e => { if(e.key === 'Escape') overlay.style.display = 'none'; });
+
+/* ---------- confetti, birthday only ---------- */
+function launchConfetti(){
+  const colors = ['#F0A8C4','#B7A6E6','#9FD6D3','#F4BE8E','#E7B04E'];
+  for(let i=0;i<60;i++){
+    const piece = document.createElement('div');
+    piece.className = 'confetti';
+    piece.style.left = Math.random()*100 + 'vw';
+    piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+    piece.style.animationDuration = (2.2 + Math.random()*1.6) + 's';
+    piece.style.opacity = 0.85;
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), 4200);
+  }
+}
+
+/* ---------- screen 1: unclickable "no" button ---------- */
+const noBtn = document.getElementById('noBtn');
+const yesBtn = document.getElementById('yesBtn');
+
+function moveNoButton(){
+  const margin = 24;
+  const w = noBtn.offsetWidth || 140;
+  const h = noBtn.offsetHeight || 50;
+  const maxX = Math.max(margin, window.innerWidth - w - margin);
+  const maxY = Math.max(margin, window.innerHeight - h - margin);
+  const x = margin + Math.random() * (maxX - margin);
+  const y = margin + Math.random() * (maxY - margin);
+  noBtn.style.left = x + 'px';
+  noBtn.style.top = y + 'px';
+}
+
+function placeNoButtonInitially(){
+  const yesRect = yesBtn.getBoundingClientRect();
+  noBtn.style.left = (yesRect.right + 24) + 'px';
+  noBtn.style.top = yesRect.top + 'px';
+}
+
+window.addEventListener('load', placeNoButtonInitially);
+noBtn.addEventListener('mouseenter', moveNoButton);
+noBtn.addEventListener('pointerdown', e => { e.preventDefault(); moveNoButton(); });
+noBtn.addEventListener('touchstart', e => { e.preventDefault(); moveNoButton(); }, {passive:false});
+noBtn.addEventListener('click', e => { e.preventDefault(); moveNoButton(); });
+
+yesBtn.addEventListener('click', () => {
+  document.getElementById('screen-question').style.display = 'none';
+  document.getElementById('screen-calendar').style.display = 'block';
+  window.scrollTo(0,0);
+});
+</script>
+</body>
+</html>
