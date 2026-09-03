@@ -8,23 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
 
-<!--
-  HOW TO EDIT THIS PAGE (for the person setting this up):
-
-  1. TEXT: Scroll down to the big "entries" list inside the <script> tag near the
-     bottom of this file. Each entry has a "text" field — edit the words between
-     the quotes to change any poem or letter. Use \n\n for a new paragraph break.
-
-  2. PHOTOS: Make a folder called "photos" in the same place as this HTML file.
-     Each entry below has a "photo" field like "photos/2024-08.jpeg" — just save
-     your picture with that exact file name (or change the field to match your
-     file name) and it will appear automatically. If no photo is found, a cute
-     placeholder shows instead, so nothing breaks if you skip a month.
-
-  3. Everything else (colors, layout, animation) can be left alone — it will
-     just work once you open the file in a browser.
--->
-
 <style>
   :root{
     --cream:#FFF8F1;
@@ -264,15 +247,18 @@
     margin:0 0 1.2rem 0;
   }
 
-  .photo-frame{
+.photo-frame{
     width:100%;
-    aspect-ratio:4/3;
+    max-width:320px;
+    margin-left:auto;
+    margin-right:auto;
+    aspect-ratio:9/16;
     border-radius:16px;
     overflow:hidden;
     margin-bottom:1.4rem;
     background:linear-gradient(135deg, rgba(240,168,196,0.25), rgba(183,166,230,0.25));
     display:flex; align-items:center; justify-content:center;
-  }
+} 
   .photo-frame img{ width:100%; height:100%; object-fit:cover; display:block; }
   .photo-placeholder{
     text-align:center;
